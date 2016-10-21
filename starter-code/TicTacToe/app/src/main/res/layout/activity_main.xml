@@ -30,8 +30,8 @@
         android:text="Start Playing!"
         android:layout_below="@id/player_two_name"/>
 
-    <TextView
-        android:id="@+id/last_winner_text"
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/winner_list_recycler"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
