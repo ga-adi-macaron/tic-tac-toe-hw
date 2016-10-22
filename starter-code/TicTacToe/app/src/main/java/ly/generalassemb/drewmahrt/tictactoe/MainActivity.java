@@ -54,19 +54,31 @@ public class MainActivity extends AppCompatActivity {
         mPlayButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(mPlayerOneField.getText().toString().equals("")){
+                if (mPlayerOneField.getText().toString().equals("")) {
                     mPlayerOneField.setError("Player one needs a name");
-                }else if(mPlayerTwoField.getText().toString().equals("")){
+                } else if (mPlayerTwoField.getText().toString().equals("")) {
                     mPlayerTwoField.setError("Player two needs a name");
+                } else {
+                    Intent toGameIntent = new Intent(MainActivity.this, GameActivity.class);
+                    toGameIntent.putExtra(PLAYER_ONE_KEY, mPlayerOneField.getText().toString());
+                    toGameIntent.putExtra(PLAYER_TWO_KEY, mPlayerTwoField.getText().toString());
+
+                    startActivityForResult(toGameIntent, REQUEST_CODE);
                 }
-
-                Intent toGameIntent = new Intent(MainActivity.this, GameActivity.class);
-                toGameIntent.putExtra(PLAYER_ONE_KEY, mPlayerOneField.getText().toString());
-                toGameIntent.putExtra(PLAYER_TWO_KEY, mPlayerTwoField.getText().toString());
-
-                startActivityForResult(toGameIntent, REQUEST_CODE);
             }
         });
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if(requestCode==REQUEST_CODE){
+            String winnerName = data.getStringExtra(WINNER_RESULT_KEY);
+            if(winnerName.equals("Tie")){
+                mWinners.add("Tie");
+            }else{
+                mWinners.add(winnerName+" won");
+            }
+            mRecyclerView.getAdapter().notifyItemInserted(mWinners.size()-1);
+        }
+    }
 }

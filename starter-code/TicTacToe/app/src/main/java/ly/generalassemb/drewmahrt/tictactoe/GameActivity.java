@@ -14,6 +14,17 @@ import static ly.generalassemb.drewmahrt.tictactoe.MainActivity.WINNER_RESULT_KE
 
 public class GameActivity extends AppCompatActivity implements View.OnClickListener{
     private TextView mTopText;
+
+    private TextView mCell1;
+    private TextView mCell2;
+    private TextView mCell3;
+    private TextView mCell4;
+    private TextView mCell5;
+    private TextView mCell6;
+    private TextView mCell7;
+    private TextView mCell8;
+    private TextView mCell9;
+
     private String mPlayer1Name;
     private String mPlayer2Name;
     private boolean mIsPlayerOneTurn;
@@ -28,12 +39,12 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
         TextView selectedView = (TextView) view;
         if(mIsPlayerOneTurn){
             selectedView.setText("X");
-            mPlayer1Choices.add((Integer) view.getTag());
+            mPlayer1Choices.add((Integer.parseInt(view.getTag().toString())));
             mIsPlayerOneTurn = false;
             mTopText.setText(mPlayer2Name+"'s turn");
         }else{
             selectedView.setText("O");
-            mPlayer2Choices.add((Integer) view.getTag());
+            mPlayer2Choices.add(Integer.parseInt(view.getTag().toString()));
             mIsPlayerOneTurn = true;
             mTopText.setText(mPlayer2Name+"'s turn");
         }
@@ -62,10 +73,42 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
         mPlayer1Choices = new ArrayList<>();
         mPlayer2Choices = new ArrayList<>();
 
+        initializeGameTextViews();
+
+
 
     }
 
+    public void initializeGameTextViews(){
+        mCell1 = (TextView)findViewById(R.id.textView);
+        mCell2 = (TextView)findViewById(R.id.textView2);
+        mCell3 = (TextView)findViewById(R.id.textView3);
+        mCell4 = (TextView)findViewById(R.id.textView4);
+        mCell5 = (TextView)findViewById(R.id.textView5);
+        mCell6 = (TextView)findViewById(R.id.textView6);
+        mCell7 = (TextView)findViewById(R.id.textView7);
+        mCell8 = (TextView)findViewById(R.id.textView8);
+        mCell9 = (TextView)findViewById(R.id.textView9);
+
+        mCell1.setOnClickListener(this);
+        mCell2.setOnClickListener(this);
+        mCell3.setOnClickListener(this);
+        mCell4.setOnClickListener(this);
+        mCell5.setOnClickListener(this);
+        mCell6.setOnClickListener(this);
+        mCell7.setOnClickListener(this);
+        mCell8.setOnClickListener(this);
+        mCell9.setOnClickListener(this);
+    }
+
     public boolean checkForWin(){
+        if(mPlayer1Choices.size()==5){
+            Intent resultIntent = new Intent();
+            resultIntent.putExtra(WINNER_RESULT_KEY, "Tie");
+            setResult(RESULT_OK, resultIntent);
+
+            mTopText.setText("Tie!");
+        }
         for (int i=0; i<mWinningCombinations.length; i++){
             if(mPlayer1Choices.contains(mWinningCombinations[i][0])
                 &&mPlayer1Choices.contains(mWinningCombinations[i][1])
