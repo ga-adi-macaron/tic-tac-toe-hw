@@ -6,9 +6,8 @@ import android.os.CountDownTimer;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.TextView;
-import android.widget.Toast;
 
-public class GameActivity extends AppCompatActivity implements View.OnClickListener{
+public class GameActivity extends AppCompatActivity implements View.OnClickListener {
 
     TextView mTextView1;
     TextView mTextView2;
@@ -19,23 +18,36 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
     TextView mTextView7;
     TextView mTextView8;
     TextView mTextView9;
-    int mTurn = 0;
+    TextView mGameMessage;
+    int mTurn = 1;
     String mLetter = "";
+    String mUserName1;
+    String mUsername2;
     Boolean win = false;
 
     public void whoseTurn() {
         if (mTurn % 2 == 0) {
             mLetter = "X";
-        } else mLetter = "O";
+            mGameMessage.setText(mUsername2 + "'s Turn");
+        } else {
+            mLetter = "O";
+            mGameMessage.setText(mUserName1 +"'s Turn");
+        }
     }
 
     public void resultWin() {
         if (win == true) {
-            Toast.makeText(this, "GAME WON!", Toast.LENGTH_SHORT).show();
+            if (mTurn % 2 == 0) {
+                mGameMessage.setText(mUserName1 +" WON!");
+            } else {
+                mGameMessage.setText(mUsername2 +" WON!");
+            }
+        } else if (mTurn == 10){
+            mGameMessage.setText("Round Tie!");
         }
     }
 
-    CountDownTimer timer = new CountDownTimer(10,10) {
+    CountDownTimer timer = new CountDownTimer(1, 1) {
         @Override
         public void onTick(long l) {
 
@@ -44,50 +56,44 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
         @Override
         public void onFinish() {
             winCondition();
-            Toast.makeText(GameActivity.this, "Result " + win, Toast.LENGTH_SHORT).show();
+            resultWin();
         }
     };
 
 
     public void winCondition() {
         //horizontalwins
-        if( mTextView1.getText() == mTextView2.getText() &&
-                mTextView2.getText() == mTextView3.getText() && mTextView1.getText() != ""){
+        if (mTextView1.getText() == mTextView2.getText() &&
+                mTextView2.getText() == mTextView3.getText() && mTextView1.getText() != "") {
             win = true;
-        }
-        else if(mTextView4.getText() == mTextView5.getText() &&
-                mTextView5.getText() == mTextView6.getText() && mTextView4.getText() != ""){
+        } else if (mTextView4.getText() == mTextView5.getText() &&
+                mTextView5.getText() == mTextView6.getText() && mTextView4.getText() != "") {
             win = true;
-        }
-        else if(mTextView7.getText() == mTextView8.getText() &&
-                mTextView8.getText() == mTextView9.getText() && mTextView7.getText() != ""){
+        } else if (mTextView7.getText() == mTextView8.getText() &&
+                mTextView8.getText() == mTextView9.getText() && mTextView7.getText() != "") {
             win = true;
         }
 
         //verticle wins
-        else if(mTextView1.getText() == mTextView4.getText() &&
-                mTextView4.getText() == mTextView7.getText() && mTextView1.getText() != ""){
+        else if (mTextView1.getText() == mTextView4.getText() &&
+                mTextView4.getText() == mTextView7.getText() && mTextView1.getText() != "") {
             win = true;
-        }
-        else if(mTextView2.getText() == mTextView5.getText() &&
-                mTextView5.getText() == mTextView8.getText() && mTextView2.getText() != ""){
+        } else if (mTextView2.getText() == mTextView5.getText() &&
+                mTextView5.getText() == mTextView8.getText() && mTextView2.getText() != "") {
             win = true;
-        }
-        else if(mTextView3.getText() == mTextView6.getText() &&
-                mTextView6.getText() == mTextView9.getText() && mTextView3.getText() != ""){
+        } else if (mTextView3.getText() == mTextView6.getText() &&
+                mTextView6.getText() == mTextView9.getText() && mTextView3.getText() != "") {
             win = true;
         }
 
         //diagonal wins
-        else if(mTextView1.getText() == mTextView5.getText() &&
-                mTextView5.getText() == mTextView9.getText() && mTextView1.getText() != ""){
+        else if (mTextView1.getText() == mTextView5.getText() &&
+                mTextView5.getText() == mTextView9.getText() && mTextView1.getText() != "") {
             win = true;
-        }
-        else if(mTextView3.getText() == mTextView5.getText() &&
-                mTextView5.getText() == mTextView7.getText() && mTextView3.getText() != ""){
+        } else if (mTextView3.getText() == mTextView5.getText() &&
+                mTextView5.getText() == mTextView7.getText() && mTextView3.getText() != "") {
             win = true;
-        }
-        else {
+        } else {
             win = false;
         }
     }
@@ -98,8 +104,8 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
         setContentView(R.layout.activity_game);
 
         Intent intent = getIntent();
-        String userName1 = intent.getStringExtra("Username1");
-        String userName2 = intent.getStringExtra("Username2");
+        mUserName1 = intent.getStringExtra("Username1");
+        mUsername2 = intent.getStringExtra("Username2");
 
         mTextView1 = (TextView) findViewById(R.id.textView1);
         mTextView2 = (TextView) findViewById(R.id.textView2);
@@ -110,6 +116,9 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
         mTextView7 = (TextView) findViewById(R.id.textView7);
         mTextView8 = (TextView) findViewById(R.id.textView8);
         mTextView9 = (TextView) findViewById(R.id.textView9);
+        mGameMessage = (TextView) findViewById(R.id.game_message_text);
+
+        mGameMessage.setText(mUserName1 +"'s Turn");
 
         mTextView1.setOnClickListener(this);
         mTextView2.setOnClickListener(this);
@@ -121,33 +130,85 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
         mTextView8.setOnClickListener(this);
         mTextView9.setOnClickListener(this);
 
-        whoseTurn();
-
     }
 
     @Override
     public void onClick(View view) {
+        if (win == false) {
         switch (view.getId()) {
-            case R.id.textView1:
-                if (mTextView1.getText() == "") {
-                    mTurn++;
-                    mTextView1.setText(mLetter);
-                    timer.start();
-                }
-                break;
-            case R.id.textView2:
-                if (mTextView2.getText() == "") {
-                    mTurn++;
-                    mTextView2.setText(mLetter);
-                    timer.start();
-                }
-                break;
-            case R.id.textView3:
-                mTextView3.setText("X");
-                timer.start();
-                break;
-
+                case R.id.textView1:
+                    if (mTextView1.getText() == "") {
+                        mTurn++;
+                        whoseTurn();
+                        mTextView1.setText(mLetter);
+                        timer.start();
+                    }
+                    break;
+                case R.id.textView2:
+                    if (mTextView2.getText() == "") {
+                        mTurn++;
+                        whoseTurn();
+                        mTextView2.setText(mLetter);
+                        timer.start();
+                    }
+                    break;
+                case R.id.textView3:
+                    if (mTextView3.getText() == "") {
+                        mTurn++;
+                        whoseTurn();
+                        mTextView3.setText(mLetter);
+                        timer.start();
+                    }
+                    break;
+                case R.id.textView4:
+                    if (mTextView4.getText() == "") {
+                        mTurn++;
+                        whoseTurn();
+                        mTextView4.setText(mLetter);
+                        timer.start();
+                    }
+                    break;
+                case R.id.textView5:
+                    if (mTextView5.getText() == "") {
+                        mTurn++;
+                        whoseTurn();
+                        mTextView5.setText(mLetter);
+                        timer.start();
+                    }
+                    break;
+                case R.id.textView6:
+                    if (mTextView6.getText() == "") {
+                        mTurn++;
+                        whoseTurn();
+                        mTextView6.setText(mLetter);
+                        timer.start();
+                    }
+                    break;
+                case R.id.textView7:
+                    if (mTextView7.getText() == "") {
+                        mTurn++;
+                        whoseTurn();
+                        mTextView7.setText(mLetter);
+                        timer.start();
+                    }
+                    break;
+                case R.id.textView8:
+                    if (mTextView8.getText() == "") {
+                        mTurn++;
+                        whoseTurn();
+                        mTextView8.setText(mLetter);
+                        timer.start();
+                    }
+                    break;
+                case R.id.textView9:
+                    if (mTextView9.getText() == "") {
+                        mTurn++;
+                        whoseTurn();
+                        mTextView9.setText(mLetter);
+                        timer.start();
+                    }
+                    break;
+            }
         }
-
     }
 }
