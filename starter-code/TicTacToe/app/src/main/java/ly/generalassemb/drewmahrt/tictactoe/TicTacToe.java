@@ -8,10 +8,9 @@ import java.util.LinkedList;
  */
 public class TicTacToe {
     private static TicTacToe ourInstance = new TicTacToe();
-    private boolean isFinished;
     private static ArrayList<Coordinate> mCoordinate;
     private static LinkedList<Player> mPlayerWon;
-    private String mPlayer1,mPlayer2;
+    private static Player mPlayer1,mPlayer2;
 
     public static TicTacToe getInstance() {
         return ourInstance;
@@ -20,45 +19,47 @@ public class TicTacToe {
     private TicTacToe() {
         mCoordinate = new ArrayList<>();
         mPlayerWon= new LinkedList<>();
-        isFinished = false;
     }
 
-    public boolean isFinished() {
-        return isFinished;
+    public static void addPlayerWon(Player player){
+        mPlayerWon.add(player);
     }
-
-    public void setFinished(boolean finished) {
-        isFinished = finished;
-    }
-
     public static LinkedList<Player> getmPlayerWon() {
         return mPlayerWon;
     }
 
-    public String getPlayer1() {
+    public Coordinate getCoordinate(int loc){
+        return mCoordinate.get(loc);
+    }
+
+    public Player getPlayer1() {
         return mPlayer1;
     }
 
-    public void setPlayer1(String player1) {
-        mPlayer1 = player1;
+    public void setPlayer1(String name) {
+        mPlayer1 = new Player(name);
     }
 
-    public String getPlayer2() {
+    public Player getPlayer2() {
         return mPlayer2;
     }
 
-    public void setPlayer2(String player2) {
-        mPlayer2 = player2;
+    public void setPlayer2(String name) {
+        mPlayer2 = new Player(name);
     }
 
-    public void generateGrid(){
-        for (int i = 0; i < 3; i++) {
+    public void generateNewGridAndPlayer(){
+        mCoordinate.clear();
+        mPlayer1.getItemPlaced().clear();
+        mPlayer2.getItemPlaced().clear();
+        for (int i = 0; i < 30; i+=10) {
             for (int j = 0; j < 3; j++) {
-                mCoordinate.add(new Coordinate(i,j));
+                mCoordinate.add(new Coordinate(i+j));
             }
         }
     }
-    public void clearGrid(){
-        mCoordinate.clear();
+
+    public boolean noMoreSpot(int turn) {
+        return turn==9;
     }
 }

@@ -5,47 +5,31 @@ package ly.generalassemb.drewmahrt.tictactoe;
  */
 
 public class Coordinate {
-    private String mStatus;
-    private int mRow, mColumn;
+    private int mStatus;
+    private int mRowColumn;
 
-    public Coordinate(int row, int column) {
-        mRow = row;
-        mColumn = column;
-        mStatus = "";
+    public Coordinate(int rowColumn) {
+        mRowColumn = rowColumn;
+        mStatus = 0;
     }
 
-    public String getStatus() {
+    public int getStatus() {
         return mStatus;
     }
 
-    public void setStatus(String status) {
+    public void setStatus(int status) {
         mStatus = status;
     }
 
-    public int getRow() {
-        return mRow;
+    public int getRowColumn() {
+        return mRowColumn;
     }
 
-    public void setRow(int row) {
-        mRow = row;
-    }
-
-    public int getColumn() {
-        return mColumn;
+    public void setRowColumn(int rowColumn) {
+        mRowColumn = rowColumn;
     }
 
     public boolean isEmpty(){
-        return mStatus.isEmpty();
-    }
-
-    private String setStatus(int playerNum){
-        switch (playerNum){
-            case 1:
-                return "Circle";
-            case 2:
-                return "Cross";
-            default:
-                return "";
-        }
+        return mStatus==0;
     }
 }

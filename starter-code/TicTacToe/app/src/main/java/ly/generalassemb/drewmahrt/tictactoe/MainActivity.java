@@ -7,12 +7,14 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity {
     TicTacToe mTicTacToe;
     EditText mPlayer1, mPlayer2;
     Button mButton;
+    TextView mWinner;
     public static final int REQUEST_CODE = 9;
 
     @Override
@@ -25,6 +27,7 @@ public class MainActivity extends AppCompatActivity {
         mPlayer1 = (EditText) findViewById(R.id.player_one_name);
         mPlayer2 = (EditText) findViewById(R.id.player_two_name);
         mButton = (Button) findViewById(R.id.start_game_button);
+        mWinner = (TextView) findViewById(R.id.last_winner_text);
 
         View.OnClickListener onClickListener = new View.OnClickListener() {
             @Override
@@ -44,5 +47,20 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         };
+        mButton.setOnClickListener(onClickListener);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode==REQUEST_CODE){
+            if (resultCode==RESULT_OK){
+                if (data.getStringExtra("winner").isEmpty()){
+                    mWinner.setText("It's a TIE!");
+                }
+                else {
+                    mWinner.setText(data.getStringExtra("winner")+" is the winner.");
+                }
+            }
+        }
     }
 }
