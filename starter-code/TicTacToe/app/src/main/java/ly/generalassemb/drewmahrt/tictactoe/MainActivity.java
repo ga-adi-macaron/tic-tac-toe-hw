@@ -7,26 +7,32 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity {
     EditText p1EditText, p2EditText;
     Button startGameButton;
+    TextView lastWinText;
     public static final int OUTCOME_CODE = 2369;
+    public static final int WINNER_CODE= 1337;
+    public static final int DRAW_CODE = 424;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        SQLiteDatabase gameHistoryDB = this.openOrCreateDatabase("Game_History", MODE_PRIVATE, null);
-
-        gameHistoryDB.execSQL("CREATE TABLE IF NOT EXISTS game_history (gameID INTEGER PRIMARY KEY, winnerName VARCHAR, loserName VARCHAR)");
+//        SQLiteDatabase gameHistoryDB = this.openOrCreateDatabase("Game_History", MODE_PRIVATE, null);
+//
+//        gameHistoryDB.execSQL("CREATE TABLE IF NOT EXISTS game_history (gameID INTEGER PRIMARY KEY, winnerName VARCHAR, loserName VARCHAR)");
 
 
 
         p1EditText = (EditText)findViewById(R.id.player_one_name);
         p2EditText = (EditText)findViewById(R.id.player_two_name);
+
+        lastWinText = (TextView)findViewById(R.id.last_winner_text);
 
         startGameButton = (Button) findViewById(R.id.start_game_button);
 
@@ -47,6 +53,18 @@ public class MainActivity extends AppCompatActivity {
         });
 
 
+
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == OUTCOME_CODE){
+            if(resultCode == DRAW_CODE){
+                lastWinText.setText("Previous Winner: \n"+"Ended in a draw");
+            }else if (resultCode == WINNER_CODE){
+                lastWinText.setText("Previous Winner: \n"+ data.getStringExtra("winner"));
+            }
+        }
 
     }
 }

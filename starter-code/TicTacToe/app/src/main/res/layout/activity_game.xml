@@ -17,11 +17,13 @@
         android:textSize="40sp"
         android:text="Player One&apos;s Turn"
         android:layout_centerHorizontal="true"
-        android:paddingBottom="100dp"/>
+        android:paddingBottom="50sp"
+        android:gravity="center"/>
 
     <GridLayout
+        android:id="@+id/board"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:columnCount="3"
         android:rowCount="3"
         android:layout_below="@+id/game_message_text">
@@ -133,6 +135,13 @@
             android:scaleType="fitXY"
             android:src="@drawable/border"
             android:tag="8"/>
-
     </GridLayout>
+    <Button
+        android:id="@+id/backButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/board"
+        android:text="Go back to \n main Screen"
+        android:layout_marginTop="20sp"
+        android:visibility="invisible"/>
 </RelativeLayout>
