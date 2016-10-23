@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 
 public class GameActivity extends AppCompatActivity implements View.OnClickListener {
@@ -19,11 +20,13 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
     TextView mTextView8;
     TextView mTextView9;
     TextView mGameMessage;
+    Button mBackButton;
     int mTurn = 1;
     String mLetter = "";
     String mUserName1;
     String mUsername2;
     Boolean win = false;
+    String mWinner = "";
 
     public void whoseTurn() {
         if (mTurn % 2 == 0) {
@@ -39,11 +42,17 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
         if (win == true) {
             if (mTurn % 2 == 0) {
                 mGameMessage.setText(mUserName1 +" WON!");
+                mWinner = mUserName1;
+                mBackButton.setVisibility(View.VISIBLE);
             } else {
                 mGameMessage.setText(mUsername2 +" WON!");
+                mWinner = mUsername2;
+                mBackButton.setVisibility(View.VISIBLE);
             }
         } else if (mTurn == 10){
             mGameMessage.setText("Round Tie!");
+            mWinner = "Round Tie!";
+            mBackButton.setVisibility(View.VISIBLE);
         }
     }
 
@@ -59,7 +68,6 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
             resultWin();
         }
     };
-
 
     public void winCondition() {
         //horizontalwins
@@ -98,6 +106,7 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
         }
     }
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -117,6 +126,7 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
         mTextView8 = (TextView) findViewById(R.id.textView8);
         mTextView9 = (TextView) findViewById(R.id.textView9);
         mGameMessage = (TextView) findViewById(R.id.game_message_text);
+        mBackButton = (Button) findViewById(R.id.backbutton);
 
         mGameMessage.setText(mUserName1 +"'s Turn");
 
@@ -129,6 +139,16 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
         mTextView7.setOnClickListener(this);
         mTextView8.setOnClickListener(this);
         mTextView9.setOnClickListener(this);
+
+        mBackButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent resultIntent = new Intent();
+                resultIntent.putExtra("Winner", mWinner);
+                setResult(RESULT_OK,resultIntent);
+                finish();
+            }
+        });
 
     }
 
