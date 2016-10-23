@@ -11,6 +11,8 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.util.ArrayList;
+
 public class MainActivity extends AppCompatActivity {
     EditText p1EditText, p2EditText;
     Button startGameButton;
@@ -20,12 +22,15 @@ public class MainActivity extends AppCompatActivity {
     public static final int DRAW_CODE = 424;
     SQLiteDatabase gameHistoryDB;
     Cursor c;
+    ArrayList<GameResult> gameResults;
 
     //ToDo: Make a recyclerView that displays multiple lines of winners.
     //ToDo: Add results to dataBase.
     //ToDo: Add an activity to display gamestate results of previous games.
     //ToDo: Load data from database.
     //ToDo: Clear data from database.
+
+
 
 
     @Override
@@ -38,6 +43,30 @@ public class MainActivity extends AppCompatActivity {
         gameHistoryDB.execSQL("CREATE TABLE IF NOT EXISTS game_history (gameID INTEGER PRIMARY KEY, p1Name VARCHAR, p2Name VARCHAR, winner VARCHAR, gameState VARCHAR)");
         //If game was draw winner var is "draw"
         c = gameHistoryDB.rawQuery("SELECT * FROM game_history", null);
+        c.moveToFirst();
+
+        //This gives Index of items when I'm looking for the data.
+            int p1Index = c.getColumnIndex("p1Name");
+            int p2Index = c.getColumnIndex("p2Name");
+            int winnerIndex = c.getColumnIndex("winner");
+            int gameStateIndex = c.getColumnIndex("gameState");
+            int gameIDIndex = c.getColumnIndex("gameID");
+        try {
+            while (c != null) {
+                gameResults.add(new GameResult(
+                        c.getString(p1Index),
+                        c.getString(p2Index),
+                        c.getString(winnerIndex),
+                        c.getString(gameStateIndex),
+                        c.getInt(gameIDIndex)
+                ));
+                c.moveToNext();
+            }
+            ;
+        }catch(Exception e){
+            e.printStackTrace();
+            Toast.makeText(this, "Loaded data", Toast.LENGTH_SHORT).show();
+        }
 
 
 
@@ -82,11 +111,7 @@ public class MainActivity extends AppCompatActivity {
                 gameStateText+=Integer.toString(i);
             }
 
-            //This gives Index of items when I'm looking for the data.
-//            int p1Index = c.getColumnIndex("p1Name");
-//            int p2Index = c.getColumnIndex("p2Name");
-//            int winnerIndex = c.getColumnIndex("winner");
-//            int gameStateIndex = c.getColumnIndex("gameState");
+
 
             String sqlExecutionString = "INSERT INTO game_history (p1Name, p2Name, winner,gameState) VALUES ("+p1Name+", "+p2Name+", "+ winner+", "+ gameStateText+")";
 

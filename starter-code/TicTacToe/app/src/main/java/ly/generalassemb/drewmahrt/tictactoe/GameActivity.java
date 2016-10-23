@@ -171,6 +171,7 @@ public class GameActivity extends AppCompatActivity {
         if(!availableMoves){
             gameText.setText("No available moves.\nIt's a draw");
             setResult(MainActivity.DRAW_CODE, gameIntent);
+            gameIntent.putExtra("winner", "Draw");
             gameActive=false;
         }
     }
