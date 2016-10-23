@@ -5,6 +5,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -23,6 +24,7 @@ public class MainActivity extends AppCompatActivity {
     SQLiteDatabase gameHistoryDB;
     Cursor c;
     ArrayList<GameResult> gameResults;
+    RecyclerView resultsRecycler;
 
     //ToDo: Make a recyclerView that displays multiple lines of winners.
     //ToDo: Add results to dataBase.
@@ -38,8 +40,9 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        gameHistoryDB = this.openOrCreateDatabase("Game_History", MODE_PRIVATE, null);
+        gameResults = new ArrayList<>();
 
+        gameHistoryDB = this.openOrCreateDatabase("Game_History", MODE_PRIVATE, null);
         gameHistoryDB.execSQL("CREATE TABLE IF NOT EXISTS game_history (gameID INTEGER PRIMARY KEY, p1Name VARCHAR, p2Name VARCHAR, winner VARCHAR, gameState VARCHAR)");
         //If game was draw winner var is "draw"
         c = gameHistoryDB.rawQuery("SELECT * FROM game_history", null);
@@ -75,6 +78,9 @@ public class MainActivity extends AppCompatActivity {
         p2EditText = (EditText)findViewById(R.id.player_two_name);
 
         lastWinText = (TextView)findViewById(R.id.last_winner_text);
+        if (gameResults.size()>0){
+            lastWinText.setText("Previous Winner: \n"+ gameResults.get(gameResults.size()-1).getWinner());
+        }
 
         startGameButton = (Button) findViewById(R.id.start_game_button);
 
@@ -105,7 +111,7 @@ public class MainActivity extends AppCompatActivity {
             String p1Name = data.getStringExtra("Player1Name");
             String p2Name = data.getStringExtra("Player2Name");
             String winner = data.getStringExtra("winner");
-            int[] gameState = data.getIntArrayExtra("gameState");
+            int[] gameState = data.getIntArrayExtra("gamestate");
             String gameStateText="";
             for (Integer i:gameState) {
                 gameStateText+=Integer.toString(i);
@@ -113,7 +119,7 @@ public class MainActivity extends AppCompatActivity {
 
 
 
-            String sqlExecutionString = "INSERT INTO game_history (p1Name, p2Name, winner,gameState) VALUES ("+p1Name+", "+p2Name+", "+ winner+", "+ gameStateText+")";
+            String sqlExecutionString = "INSERT INTO game_history (p1Name, p2Name, winner, gameState) VALUES ('"+p1Name+"', '"+p2Name+"', '"+ winner+"', '"+ gameStateText+"')";
 
             if(resultCode == DRAW_CODE){
                 lastWinText.setText("Previous Winner: \n"+"Ended in a draw");

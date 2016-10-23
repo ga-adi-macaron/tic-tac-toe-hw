@@ -40,5 +40,10 @@
         android:text="Previous Winner:"
         android:gravity="center"/>
 
+<android.support.v7.widget.RecyclerView
+    android:id="@+id/resultsrecycler"
+    android:layout_below="@id/last_winner_text"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"/>
 
 </RelativeLayout>
