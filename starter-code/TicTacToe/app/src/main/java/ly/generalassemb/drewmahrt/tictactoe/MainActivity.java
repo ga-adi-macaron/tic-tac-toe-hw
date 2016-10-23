@@ -52,14 +52,15 @@ public class MainActivity extends AppCompatActivity {
                     Intent i = new Intent(MainActivity.this, GameActivity.class);
                     i.putExtra("1", mP1);
                     i.putExtra("2", mP2);
-                    startActivity(i);
+                    startActivityForResult(i,1);
                     }
                 }
             });
 
 
             //Recieve data from the game after it's over
-            //Don't use the normal send intent, it's something else, I forget
+        onActivityResult();
+
 
         }
 }
