@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity {
@@ -16,7 +17,7 @@ public class MainActivity extends AppCompatActivity {
 
     private Button mStartButton;
 
-    public static final int REQUEST = 61;
+    private TextView mPreviousWinner;
 
 
     @Override
@@ -27,6 +28,7 @@ public class MainActivity extends AppCompatActivity {
         mPlayer1Name = (EditText) findViewById(R.id.player_one_name);
         mPlayer2Name = (EditText) findViewById(R.id.player_two_name);
         mStartButton = (Button) findViewById(R.id.start_game_button);
+        mPreviousWinner = (TextView) findViewById(R.id.last_winner_text);
 
 
         mStartButton.setOnClickListener(new View.OnClickListener() {
@@ -42,9 +44,19 @@ public class MainActivity extends AppCompatActivity {
                     Intent startGameIntent = new Intent(MainActivity.this, GameActivity.class);
                     startGameIntent.putExtra("P1Name", mPlayer1Name.getText().toString());
                     startGameIntent.putExtra("P2Name", mPlayer2Name.getText().toString());
-                    startActivityForResult(startGameIntent, REQUEST);
+                    startActivity(startGameIntent);
                 }
             }
         });
+
+        Intent winResult = getIntent();
+        String winner = winResult.getStringExtra("WIN");
+
+        if (winner == null){
+            mPreviousWinner.setText("Play New Game");
+        }else {
+            mPreviousWinner.setText("Last Game's Winner was " + winner);
+        }
+
     }
 }
