@@ -61,7 +61,7 @@ public class MainActivity extends AppCompatActivity {
         if (requestCode==REQUEST_CODE){
             if (resultCode==RESULT_OK){
                 if (!data.getStringExtra("winner").isEmpty()){
-                    adapter.notifyItemInserted(0);
+                    adapter.notifyDataSetChanged();
                 }
             }
         }

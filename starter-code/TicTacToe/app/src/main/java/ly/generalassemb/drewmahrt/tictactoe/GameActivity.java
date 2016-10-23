@@ -11,6 +11,7 @@ public class GameActivity extends AppCompatActivity {
     Intent gameIntent;
     TicTacToe mTicTacToe;
     int mTurn =1;
+    boolean mIsFinished = false;
     TextView mTurnText,mCurrentWinner;
     ImageView mSlot0_0,mSlot0_1,mSlot0_2,mSlot1_0,mSlot1_1,mSlot1_2,mSlot2_0,mSlot2_1,mSlot2_2;
 
@@ -56,27 +57,32 @@ public class GameActivity extends AppCompatActivity {
         mSlot2_0.setOnClickListener(gridListener(mTicTacToe.getCoordinate(6)));
         mSlot2_1.setOnClickListener(gridListener(mTicTacToe.getCoordinate(7)));
         mSlot2_2.setOnClickListener(gridListener(mTicTacToe.getCoordinate(8)));
-
     }
 
     public void changeIcon(Coordinate coordinate,ImageView imageView, int turn) {
         if (coordinate.isEmpty()) {
-            if (turn % 2 == 1) {
-                imageView.setImageResource(R.drawable.ic_o);
-                coordinate.setStatus(1);
-                mTicTacToe.getPlayer1().addItem(coordinate);
-                mTurnText.setText(mTicTacToe.getPlayer2().getName()+"'s Turn.");
-                mTurn++;
-            } else {
-                imageView.setImageResource(R.drawable.ic_x);
-                coordinate.setStatus(2);
-                mTicTacToe.getPlayer2().addItem(coordinate);
-                mTurnText.setText(mTicTacToe.getPlayer1().getName()+"'s Turn.");
-                mTurn++;
+
+            if ( !(mTicTacToe.isWinner(mTicTacToe.getPlayer1())
+                    || mTicTacToe.isWinner(mTicTacToe.getPlayer2()) )
+                    ) {
+                if (turn % 2 == 1) {
+                    imageView.setImageResource(R.drawable.ic_o);
+                    coordinate.setStatus(1);
+                    mTicTacToe.getPlayer1().addItem(coordinate);
+                    mTurnText.setText(mTicTacToe.getPlayer2().getName() + "'s Turn.");
+                    mTurn++;
+                } else {
+                    imageView.setImageResource(R.drawable.ic_x);
+                    coordinate.setStatus(2);
+                    mTicTacToe.getPlayer2().addItem(coordinate);
+                    mTurnText.setText(mTicTacToe.getPlayer1().getName() + "'s Turn.");
+                    mTurn++;
+                }
             }
         }
     }
 
+    //Use changeIcon for the listener
     public View.OnClickListener gridListener (final Coordinate coordinate){
         View.OnClickListener onClickListener = new View.OnClickListener() {
             @Override
@@ -110,31 +116,33 @@ public class GameActivity extends AppCompatActivity {
                         changeIcon(coordinate,(ImageView)v, mTurn);
                         break;
                 }
-                checkWinner();
+                if (!mIsFinished) {
+                    mIsFinished = checkWinner();
+                }
             }
         };
         return onClickListener;
     }
 
-    public void checkWinner(){
+    public boolean checkWinner(){
+    //Check for win condition or game is done
+        if (mTicTacToe.isWinner(mTicTacToe.getPlayer1())) {
+            TicTacToe.addPlayerWon(mTicTacToe.getPlayer1());
+            mCurrentWinner.setText(mTicTacToe.getPlayer1().getName() + " is the WINNER!!");
+            gameIntent.putExtra("winner", mTicTacToe.getPlayer1().getName());
+            setResult(RESULT_OK, gameIntent);
 
-        //Check for win condition or game is done
-        if (mTurn>4) {
-            if (mTicTacToe.isWinner(mTicTacToe.getPlayer1())) {
-                TicTacToe.addPlayerWon(mTicTacToe.getPlayer1());
-                mCurrentWinner.setText(mTicTacToe.getPlayer1().getName() + " is the WINNER!!");
-                gameIntent.putExtra("winner", mTicTacToe.getPlayer1().getName());
-                setResult(RESULT_OK, gameIntent);
+        } else if (mTicTacToe.isWinner(mTicTacToe.getPlayer2())) {
+            TicTacToe.addPlayerWon(mTicTacToe.getPlayer2());
+            mCurrentWinner.setText(mTicTacToe.getPlayer2().getName() + " is the WINNER!!");
+            gameIntent.putExtra("winner", mTicTacToe.getPlayer1().getName());
+            setResult(RESULT_OK, gameIntent);
 
-            } else if (mTicTacToe.isWinner(mTicTacToe.getPlayer2())) {
-                TicTacToe.addPlayerWon(mTicTacToe.getPlayer2());
-                mCurrentWinner.setText(mTicTacToe.getPlayer2().getName() + " is the WINNER!!");
-                gameIntent.putExtra("winner", mTicTacToe.getPlayer1().getName());
-                setResult(RESULT_OK, gameIntent);
-
-            } else if (mTurn==10) {
-                mCurrentWinner.setText("It's a TIE.");
-            }
+        } else if (mTurn==10) {
+            mCurrentWinner.setText("It's a TIE.");
+        }else{
+            return false;
         }
+        return true;
     }
 }
