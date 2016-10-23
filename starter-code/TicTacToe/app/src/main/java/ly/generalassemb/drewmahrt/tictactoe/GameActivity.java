@@ -18,6 +18,8 @@ public class GameActivity extends AppCompatActivity {
     boolean p1Turn;
     TextView gameText;
     boolean gameActive;
+    String p1Name, p2Name;
+
 
     ArrayList<Integer> p1Moves, p2Moves;
 
@@ -34,8 +36,8 @@ public class GameActivity extends AppCompatActivity {
 
         gameActive=true;
         Intent gameIntent =getIntent();
-        String p1Name = gameIntent.getStringExtra("Player1Name");
-        String p2Name = gameIntent.getStringExtra("Player2Name");
+        p1Name = gameIntent.getStringExtra("Player1Name");
+        p2Name = gameIntent.getStringExtra("Player2Name");
 
         gameText = (TextView)findViewById(R.id.game_message_text);
 
@@ -81,9 +83,11 @@ public class GameActivity extends AppCompatActivity {
                         if (p1Turn) {
                             iView.setImageResource(R.drawable.tictac);
                             p1Turn = !p1Turn;
+                            gameText.setText(p2Name+"'s turn");
                             gameState[tagNum] = 0;
                         } else {
                             iView.setImageResource(R.drawable.toe);
+                            gameText.setText(p1Name+"'s turn");
                             p1Turn = !p1Turn;
                             gameState[tagNum] = 1;
                         }
@@ -116,9 +120,12 @@ public class GameActivity extends AppCompatActivity {
                     && gameState[winningPosition[1]]==gameState[winningPosition[2]]
                     && gameState[winningPosition[0]]!=2){
                 if(gameState[winningPosition[0]]==0){
-                    Toast.makeText(this, "Player 1 wins. Change this", Toast.LENGTH_SHORT).show();
+                    gameText.setText(p1Name+" is victorious!");
+                    Toast.makeText(this, p1Name+" landed the killing blow!", Toast.LENGTH_SHORT).show();
                 }else{
-                    Toast.makeText(this, "Player 2 wins. Change this", Toast.LENGTH_LONG).show();
+
+                    gameText.setText(p2Name+" is victorious!");
+                    Toast.makeText(this, p2Name+ " landed the killing blow!", Toast.LENGTH_LONG).show();
                 }
                 gameActive=false;
             }
