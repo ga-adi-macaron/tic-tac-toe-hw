@@ -13,20 +13,8 @@ public class Coordinate {
         mStatus = 0;
     }
 
-    public int getStatus() {
-        return mStatus;
-    }
-
     public void setStatus(int status) {
         mStatus = status;
-    }
-
-    public int getRowColumn() {
-        return mRowColumn;
-    }
-
-    public void setRowColumn(int rowColumn) {
-        mRowColumn = rowColumn;
     }
 
     public boolean isEmpty(){

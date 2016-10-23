@@ -4,10 +4,8 @@ import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.GridLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 public class GameActivity extends AppCompatActivity {
     Intent gameIntent;
@@ -127,17 +125,15 @@ public class GameActivity extends AppCompatActivity {
                 mCurrentWinner.setText(mTicTacToe.getPlayer1().getName() + " is the WINNER!!");
                 gameIntent.putExtra("winner", mTicTacToe.getPlayer1().getName());
                 setResult(RESULT_OK, gameIntent);
-                finish();
+
             } else if (mTicTacToe.isWinner(mTicTacToe.getPlayer2())) {
                 TicTacToe.addPlayerWon(mTicTacToe.getPlayer2());
                 mCurrentWinner.setText(mTicTacToe.getPlayer2().getName() + " is the WINNER!!");
-                gameIntent.putExtra("winner", mTicTacToe.getPlayer2().getName());
+                gameIntent.putExtra("winner", mTicTacToe.getPlayer1().getName());
                 setResult(RESULT_OK, gameIntent);
-                finish();
+
             } else if (mTurn==10) {
                 mCurrentWinner.setText("It's a TIE.");
-                gameIntent.putExtra("winner", "");
-                setResult(RESULT_OK, gameIntent);
             }
         }
     }

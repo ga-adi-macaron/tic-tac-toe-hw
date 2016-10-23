@@ -22,7 +22,7 @@ public class TicTacToe {
     }
 
     public static void addPlayerWon(Player player){
-        mPlayerWon.add(player);
+        mPlayerWon.add(0,player);
     }
     public static LinkedList<Player> getmPlayerWon() {
         return mPlayerWon;
