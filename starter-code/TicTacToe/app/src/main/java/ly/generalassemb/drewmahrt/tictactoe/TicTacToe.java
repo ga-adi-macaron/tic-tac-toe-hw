@@ -48,6 +48,53 @@ public class TicTacToe {
         mPlayer2 = new Player(name);
     }
 
+    /**
+     * Check all the possible win condition
+     * @return if player won or lose
+     */
+    public boolean isWinner(Player player){
+        LinkedList<Coordinate> coordinates = player.getItemPlaced();
+                //Row 1
+            if  ( (coordinates.contains(mCoordinate.get(0)) &&
+                    coordinates.contains(mCoordinate.get(1)) &&
+                    coordinates.contains(mCoordinate.get(2)) ) ||
+                //Row 2
+                ( coordinates.contains(mCoordinate.get(3)) &&
+                        coordinates.contains(mCoordinate.get(4)) &&
+                        coordinates.contains(mCoordinate.get(5)) ) ||
+                //Row 3
+                ( coordinates.contains(mCoordinate.get(6)) &&
+                        coordinates.contains(mCoordinate.get(7)) &&
+                        coordinates.contains(mCoordinate.get(8)) ) ||
+                //Column 1
+                ( coordinates.contains(mCoordinate.get(0)) &&
+                        coordinates.contains(mCoordinate.get(3)) &&
+                        coordinates.contains(mCoordinate.get(6)) ) ||
+                //Column 2
+                ( coordinates.contains(mCoordinate.get(1)) &&
+                        coordinates.contains(mCoordinate.get(4)) &&
+                        coordinates.contains(mCoordinate.get(7)) ) ||
+                //Column 3
+                ( coordinates.contains(mCoordinate.get(2)) &&
+                        coordinates.contains(mCoordinate.get(5)) &&
+                        coordinates.contains(mCoordinate.get(8)) ) ||
+                //Diagonal 1
+                ( coordinates.contains(mCoordinate.get(0)) &&
+                        coordinates.contains(mCoordinate.get(4)) &&
+                        coordinates.contains(mCoordinate.get(8)) ) ||
+                //Diagonal 2
+                ( coordinates.contains(mCoordinate.get(2)) &&
+                        coordinates.contains(mCoordinate.get(4)) &&
+                        coordinates.contains(mCoordinate.get(6)) )
+                ) {
+                return true;
+            }
+        return false;
+    }
+
+    /**
+     * Generate new set of grid and players
+     */
     public void generateNewGridAndPlayer(){
         mCoordinate.clear();
         mPlayer1.getItemPlaced().clear();
@@ -57,9 +104,5 @@ public class TicTacToe {
                 mCoordinate.add(new Coordinate(i+j));
             }
         }
-    }
-
-    public boolean noMoreSpot(int turn) {
-        return turn==9;
     }
 }

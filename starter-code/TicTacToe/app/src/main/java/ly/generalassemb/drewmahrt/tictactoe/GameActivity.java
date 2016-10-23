@@ -117,17 +117,18 @@ public class GameActivity extends AppCompatActivity {
         };
         return onClickListener;
     }
+
     public void checkWinner(){
 
         //Check for win condition or game is done
         if (mTurn>4) {
-            if (mTicTacToe.getPlayer1().isWinner()) {
+            if (mTicTacToe.isWinner(mTicTacToe.getPlayer1())) {
                 TicTacToe.addPlayerWon(mTicTacToe.getPlayer1());
                 mCurrentWinner.setText(mTicTacToe.getPlayer1().getName() + " is the WINNER!!");
                 gameIntent.putExtra("winner", mTicTacToe.getPlayer1().getName());
                 setResult(RESULT_OK, gameIntent);
                 finish();
-            } else if (mTicTacToe.getPlayer2().isWinner()) {
+            } else if (mTicTacToe.isWinner(mTicTacToe.getPlayer2())) {
                 TicTacToe.addPlayerWon(mTicTacToe.getPlayer2());
                 mCurrentWinner.setText(mTicTacToe.getPlayer2().getName() + " is the WINNER!!");
                 gameIntent.putExtra("winner", mTicTacToe.getPlayer2().getName());
