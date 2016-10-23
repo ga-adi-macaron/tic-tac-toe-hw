@@ -59,16 +59,6 @@ public class GameActivity extends AppCompatActivity {
         imageView7 = (ImageView)findViewById(R.id.imageView8);
         imageView8 = (ImageView)findViewById(R.id.imageView9);
 
-        allImageViews.add(imageView0);
-        allImageViews.add(imageView1);
-        allImageViews.add(imageView2);
-        allImageViews.add(imageView3);
-        allImageViews.add(imageView4);
-        allImageViews.add(imageView5);
-        allImageViews.add(imageView6);
-        allImageViews.add(imageView7);
-        allImageViews.add(imageView8);
-
         View.OnClickListener selectArea = new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -93,15 +83,26 @@ public class GameActivity extends AppCompatActivity {
                         }
                     }
                     checkForWinner();
+                    checkIfMovesAvailable();
                 }
             }
         };
 
 
+        //ArrayList of all imagesView to set background of board.
+        allImageViews.add(imageView0);
+        allImageViews.add(imageView1);
+        allImageViews.add(imageView2);
+        allImageViews.add(imageView3);
+        allImageViews.add(imageView4);
+        allImageViews.add(imageView5);
+        allImageViews.add(imageView6);
+        allImageViews.add(imageView7);
+        allImageViews.add(imageView8);
 
-
+        //Sets checkered background
         boolean light = true;
-        for (ImageView view:allImageViews) {//Sets checkered background
+        for (ImageView view:allImageViews) {
             if(light){
                 view.setBackgroundResource(R.drawable.wood_bg_light);
                 view.setOnClickListener(selectArea);
@@ -130,6 +131,19 @@ public class GameActivity extends AppCompatActivity {
                 gameActive=false;
             }
 
+        }
+    }
+    public void checkIfMovesAvailable(){
+        boolean availableMoves = false;
+        for (Integer i:gameState) {
+            if (i==2){
+                availableMoves=true;
+            }
+
+        }
+        if(!availableMoves){
+            gameText.setText("No available moves.\n Game ends in a draw");
+            gameActive=false;
         }
     }
 }
