@@ -30,6 +30,7 @@ public class GameActivity extends AppCompatActivity {
         i = 0;
 
         Intent iFrom = getIntent();
+
         p1 = iFrom.getStringExtra("1");
         p2 = iFrom.getStringExtra("2");
 
@@ -107,11 +108,8 @@ public class GameActivity extends AppCompatActivity {
             oWin();
         } if(getMove(6,4,2,o)){
             oWin();
-        }
-
-        checkForTie();
-
-        }
+        } checkForTie();
+    }
 
 
     public void checkForTie() {
@@ -119,8 +117,7 @@ public class GameActivity extends AppCompatActivity {
             if (mSq.get(j).getText().toString().equals("")) {
                 return;
             }
-        }
-        tie();
+        } tie();
     }
 
 
@@ -128,7 +125,7 @@ public class GameActivity extends AppCompatActivity {
         if(mSq.get(p).getText().toString().equals(s)
                 && mSq.get(q).getText().toString().equals(s)
                 && mSq.get(r).getText().toString().equals(s)){
-            Toast.makeText(this, "GAME DONE", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "GAME OVER", Toast.LENGTH_SHORT).show();
             return true;
         }
         else{
@@ -138,14 +135,24 @@ public class GameActivity extends AppCompatActivity {
 
     public void oWin(){
         mWinner = p2;
+        Intent toFirstActivity = new Intent();
+        toFirstActivity.putExtra("Code", p2);
+        setResult(RESULT_OK, toFirstActivity);
         finish();
     }
 
     public void xWin(){
         mWinner = p1;
+        Intent toFirstActivity = new Intent();
+        toFirstActivity.putExtra("Code", p1);
+        setResult(RESULT_OK, toFirstActivity);
         finish();
     }
+
     public void tie(){
+        Intent toFirstActivity = new Intent();
+        toFirstActivity.putExtra("Code", "TIE");
+        setResult(RESULT_OK, toFirstActivity);
         mWinner = "IT WAS A TIE!";
         finish();
     }

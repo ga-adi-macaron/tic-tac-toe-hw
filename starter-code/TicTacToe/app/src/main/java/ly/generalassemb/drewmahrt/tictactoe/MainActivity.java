@@ -9,6 +9,8 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import static android.R.attr.data;
+
 public class MainActivity extends AppCompatActivity {
 
 
@@ -16,6 +18,7 @@ public class MainActivity extends AppCompatActivity {
     Button mPlay;
     TextView mLastWinnter;
     String mP1, mP2;
+    String fromSecondActivity;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,9 +61,18 @@ public class MainActivity extends AppCompatActivity {
             });
 
 
-            //Recieve data from the game after it's over
-        onActivityResult();
 
 
         }
+
+        @Override
+        protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+            super.onActivityResult(requestCode, resultCode, data);
+            if(requestCode == 1 && resultCode == RESULT_OK){
+                String fromSecondActivity = data.getStringExtra("Code");
+                mLastWinnter.setText(fromSecondActivity);
+            }
+
+
+    }
 }
