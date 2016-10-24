@@ -24,8 +24,6 @@ public class GameActivity extends AppCompatActivity {
     Button backButton;
 
 
-    ArrayList<Integer> p1Moves, p2Moves;
-
     //2 is an unplayed spot, 0 is held by player1, 1 is held by player 2.
     int[] gameState = {2,2,2,2,2,2,2,2,2};
     int[][] winningPositions={{0,1,2},{3,4,5},{6,7,8},{0,3,6},{1,4,7},{2,5,8},{0,4,8},{2,4,6}};
@@ -73,7 +71,7 @@ public class GameActivity extends AppCompatActivity {
                     String tag = view.getTag().toString();
                     int tagNum = Integer.valueOf(tag);
                     if (gameState[tagNum] != 2) {
-                        Toast.makeText(GameActivity.this, "You can't place there", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(GameActivity.this, "That space is occupied", Toast.LENGTH_SHORT).show();
                     } else {
 
                         ImageView iView = (ImageView) view;

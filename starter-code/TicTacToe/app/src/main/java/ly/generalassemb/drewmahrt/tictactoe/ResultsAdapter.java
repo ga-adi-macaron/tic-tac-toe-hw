@@ -1,12 +1,12 @@
 package ly.generalassemb.drewmahrt.tictactoe;
 
+import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import java.util.List;
 
@@ -29,7 +29,7 @@ public class ResultsAdapter extends RecyclerView.Adapter<ResultsViewHolder> {
     }
 
     @Override
-    public void onBindViewHolder(ResultsViewHolder holder, int position) {
+    public void onBindViewHolder(final ResultsViewHolder holder, final int position) {
         TextView textView = (TextView) holder.itemView.findViewById(R.id.text);
         RelativeLayout layout = (RelativeLayout)holder.itemView.findViewById(R.id.holder_layout);
 
@@ -37,7 +37,9 @@ public class ResultsAdapter extends RecyclerView.Adapter<ResultsViewHolder> {
         layout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Toast.makeText(view.getContext(), "This will load game details.", Toast.LENGTH_SHORT).show();
+                Intent replayIntent = new Intent(view.getContext(), ReplayActivity.class);
+                replayIntent.putExtra("gameID",Integer.toString(mGameResults.get(holder.getAdapterPosition()).getGameID()));
+                view.getContext().startActivity(replayIntent);
             }
         });
 

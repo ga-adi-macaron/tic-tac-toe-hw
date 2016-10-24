@@ -24,16 +24,12 @@ public class MainActivity extends AppCompatActivity {
     public static final int OUTCOME_CODE = 2369;
     public static final int WINNER_CODE= 1337;
     public static final int DRAW_CODE = 424;
-    SQLiteDatabase gameHistoryDB;
-    Cursor c;
+    public static SQLiteDatabase gameHistoryDB;
+    public Cursor c;
     ArrayList<GameResult> gameResults;
     RecyclerView resultsRecycler;
 
     //ToDo: Add an activity to display gamestate results of previous games.
-    //ToDo: Clear data from database.
-
-
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,7 +38,7 @@ public class MainActivity extends AppCompatActivity {
 
         gameResults = new ArrayList<>();
 
-        gameHistoryDB = this.openOrCreateDatabase("Game_History", MODE_PRIVATE, null);
+        gameHistoryDB = openOrCreateDatabase("Game_History", MODE_PRIVATE, null);
         gameHistoryDB.execSQL("CREATE TABLE IF NOT EXISTS game_history (gameID INTEGER PRIMARY KEY, p1Name VARCHAR, p2Name VARCHAR, winner VARCHAR, gameState VARCHAR)");
         //If game was draw winner var is "draw"
         c = gameHistoryDB.rawQuery("SELECT * FROM game_history", null);
@@ -61,7 +57,8 @@ public class MainActivity extends AppCompatActivity {
                         c.getString(p1Index),
                         c.getString(p2Index),
                         c.getString(winnerIndex),
-                        c.getString(gameStateIndex)
+                        c.getString(gameStateIndex),
+                        c.getInt(gameIDIndex)
                 ));
                 c.moveToNext();
             }
@@ -70,6 +67,7 @@ public class MainActivity extends AppCompatActivity {
             e.printStackTrace();
             Toast.makeText(this, "Loaded data", Toast.LENGTH_SHORT).show();
         }
+        c.close();
 
 
         p1EditText = (EditText)findViewById(R.id.player_one_name);
@@ -131,6 +129,7 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == OUTCOME_CODE){
@@ -147,7 +146,7 @@ public class MainActivity extends AppCompatActivity {
             String sqlExecutionString = "INSERT INTO game_history (p1Name, p2Name, winner, gameState) VALUES ('"+p1Name+"', '"+p2Name+"', '"+ winner+"', '"+ gameStateText+"')";
 
             gameHistoryDB.execSQL(sqlExecutionString);
-            gameResults.add(new GameResult(p1Name,p2Name,winner,gameStateText));
+            gameResults.add(new GameResult(p1Name,p2Name,winner,gameStateText, gameResults.size()+1));
 
         }
 
