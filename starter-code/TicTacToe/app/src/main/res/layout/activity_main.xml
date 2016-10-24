@@ -29,14 +29,10 @@
         android:layout_height="wrap_content"
         android:text="Start Playing!"
         android:layout_below="@id/player_two_name"/>
-
-    <TextView
-        android:id="@+id/last_winner_text"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
+    <android.support.v7.widget.RecyclerView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
         android:layout_below="@id/start_game_button"
-        android:textSize="25sp"
-        android:text="Previous Winner:" />
-
+        android:id="@+id/recycler_view">
+    </android.support.v7.widget.RecyclerView>
 </RelativeLayout>
