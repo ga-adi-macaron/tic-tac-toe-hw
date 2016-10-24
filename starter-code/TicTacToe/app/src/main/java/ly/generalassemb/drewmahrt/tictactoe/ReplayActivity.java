@@ -48,7 +48,7 @@ public class ReplayActivity extends AppCompatActivity {
         Cursor c = MainActivity.gameHistoryDB.rawQuery("SELECT * FROM game_history WHERE gameID = "+ replayIntent.getStringExtra("gameID"), null);
         c.moveToFirst();
         String gameState = c.getString(c.getColumnIndex("gameState"));
-        winnerText.setText(c.getString(c.getColumnIndex("winner")));
+        winnerText.setText(c.getString(c.getColumnIndex("winner"))+"\nwas the winner");
         c.close();
 
         Log.d("GameState: ", gameState);
@@ -62,15 +62,15 @@ public class ReplayActivity extends AppCompatActivity {
                 allImageViews.get(i).setImageResource(R.drawable.toe);
             }else if (endGameState[i]==1){
                 allImageViews.get(i).setImageResource(R.drawable.tictac);
+            }
+            if(lightBoard){
+                allImageViews.get(i).setBackgroundResource(R.drawable.wood_bg_light);
             }else{
-                if(lightBoard){
-                    allImageViews.get(i).setBackgroundResource(R.drawable.wood_bg_light);
-                }else{
-                    allImageViews.get(i).setBackgroundResource(R.drawable.wood_bg_dark);
-                }
+                allImageViews.get(i).setBackgroundResource(R.drawable.wood_bg_dark);
             }
             lightBoard=!lightBoard;
-        }
+            }
+
         Button backButton = (Button)findViewById(R.id.replaybackButton);
         backButton.setOnClickListener(new View.OnClickListener() {
             @Override
