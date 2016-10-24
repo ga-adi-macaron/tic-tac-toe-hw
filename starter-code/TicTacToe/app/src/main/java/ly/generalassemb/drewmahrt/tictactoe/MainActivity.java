@@ -5,6 +5,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.Button;
@@ -27,7 +28,6 @@ public class MainActivity extends AppCompatActivity {
     RecyclerView resultsRecycler;
 
     //ToDo: Make a recyclerView that displays multiple lines of winners.
-    //ToDo: Add results to dataBase.
     //ToDo: Add an activity to display gamestate results of previous games.
     //ToDo: Load data from database.
     //ToDo: Clear data from database.
@@ -60,8 +60,7 @@ public class MainActivity extends AppCompatActivity {
                         c.getString(p1Index),
                         c.getString(p2Index),
                         c.getString(winnerIndex),
-                        c.getString(gameStateIndex),
-                        c.getInt(gameIDIndex)
+                        c.getString(gameStateIndex)
                 ));
                 c.moveToNext();
             }
@@ -72,12 +71,14 @@ public class MainActivity extends AppCompatActivity {
         }
 
 
-
-
         p1EditText = (EditText)findViewById(R.id.player_one_name);
         p2EditText = (EditText)findViewById(R.id.player_two_name);
 
         lastWinText = (TextView)findViewById(R.id.last_winner_text);
+        resultsRecycler = (RecyclerView)findViewById(R.id.resultsrecycler);
+        LinearLayoutManager layoutManager = new LinearLayoutManager(MainActivity.this,LinearLayoutManager.VERTICAL,true);
+        resultsRecycler.setLayoutManager(layoutManager);
+
         if (gameResults.size()>0){
             lastWinText.setText("Previous Winner: \n"+ gameResults.get(gameResults.size()-1).getWinner());
         }
@@ -100,7 +101,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-
+        resultsRecycler.setAdapter(new ResultsAdapter(gameResults));
 
     }
 
@@ -113,22 +114,15 @@ public class MainActivity extends AppCompatActivity {
             String winner = data.getStringExtra("winner");
             int[] gameState = data.getIntArrayExtra("gamestate");
             String gameStateText="";
+
             for (Integer i:gameState) {
                 gameStateText+=Integer.toString(i);
             }
-
-
-
             String sqlExecutionString = "INSERT INTO game_history (p1Name, p2Name, winner, gameState) VALUES ('"+p1Name+"', '"+p2Name+"', '"+ winner+"', '"+ gameStateText+"')";
 
-            if(resultCode == DRAW_CODE){
-                lastWinText.setText("Previous Winner: \n"+"Ended in a draw");
-
-            }else if (resultCode == WINNER_CODE){
-                lastWinText.setText("Previous Winner: \n"+ data.getStringExtra("winner"));
-
-            }
             gameHistoryDB.execSQL(sqlExecutionString);
+            gameResults.add(new GameResult(p1Name,p2Name,winner,gameStateText));
+
         }
 
     }

@@ -7,14 +7,12 @@ package ly.generalassemb.drewmahrt.tictactoe;
 public class GameResult {
     private String mp1Name, mp2Name, mWinner;
     private int[] mGameState;
-    private int mGameID;
 
-    public GameResult(String p1Name, String p2Name, String winner, String gameStateText, int gameID){
+    public GameResult(String p1Name, String p2Name, String winner, String gameStateText){
         mp1Name = p1Name;
         mp2Name = p2Name;
         mWinner = winner;
         mGameState = stringIntToIntArray(gameStateText);
-        mGameID=gameID;
     }
 
     public int[] stringIntToIntArray(String stringInt){
@@ -42,7 +40,4 @@ public class GameResult {
         return mGameState;
     }
 
-    public int getGameID() {
-        return mGameID;
-    }
 }
