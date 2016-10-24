@@ -1,8 +1,10 @@
 package ly.generalassemb.drewmahrt.tictactoe;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -17,7 +19,7 @@ import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
     EditText p1EditText, p2EditText;
-    Button startGameButton;
+    Button startGameButton, clearHistButton;
     TextView lastWinText;
     public static final int OUTCOME_CODE = 2369;
     public static final int WINNER_CODE= 1337;
@@ -27,9 +29,7 @@ public class MainActivity extends AppCompatActivity {
     ArrayList<GameResult> gameResults;
     RecyclerView resultsRecycler;
 
-    //ToDo: Make a recyclerView that displays multiple lines of winners.
     //ToDo: Add an activity to display gamestate results of previous games.
-    //ToDo: Load data from database.
     //ToDo: Clear data from database.
 
 
@@ -53,7 +53,8 @@ public class MainActivity extends AppCompatActivity {
             int p2Index = c.getColumnIndex("p2Name");
             int winnerIndex = c.getColumnIndex("winner");
             int gameStateIndex = c.getColumnIndex("gameState");
-            int gameIDIndex = c.getColumnIndex("gameID");
+            int gameIDIndex = c.getColumnIndex("gameID");//Currently not using this, but might want to add gameIds to display game number.
+
         try {
             while (c != null) {
                 gameResults.add(new GameResult(
@@ -80,10 +81,11 @@ public class MainActivity extends AppCompatActivity {
         resultsRecycler.setLayoutManager(layoutManager);
 
         if (gameResults.size()>0){
-            lastWinText.setText("Previous Winner: \n"+ gameResults.get(gameResults.size()-1).getWinner());
+            lastWinText.setText("Previous Winners:");
         }
 
         startGameButton = (Button) findViewById(R.id.start_game_button);
+
 
         startGameButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -98,6 +100,30 @@ public class MainActivity extends AppCompatActivity {
                 gameIntent.putExtra("Player1Name", p1EditText.getText().toString());
                 gameIntent.putExtra("Player2Name", p2EditText.getText().toString());
                 startActivityForResult(gameIntent, OUTCOME_CODE);
+            }
+        });
+
+        clearHistButton = (Button) findViewById(R.id.clear_history_butt);
+        clearHistButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                AlertDialog.Builder builder = new AlertDialog.Builder(view.getContext());
+                builder.setMessage("Wipe all history?")
+                        .setPositiveButton("Eradicate it all", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                gameHistoryDB.execSQL("DELETE FROM game_history");
+                                gameHistoryDB.execSQL("VACUUM");
+                                gameResults.clear();
+                                resultsRecycler.getAdapter().notifyDataSetChanged();
+                            }
+                        })
+                        .setNegativeButton("Erasing history is a folly", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                dialogInterface.cancel();
+                            }
+                        }).show();
             }
         });
 

@@ -15,6 +15,8 @@ public class GameResult {
         mGameState = stringIntToIntArray(gameStateText);
     }
 
+    //Changes gamestate from text to int array. Since SQL can't hold array,
+    //I held the array as an int string. This changes it back to an array.
     public int[] stringIntToIntArray(String stringInt){
         int[] intArray = new int[9];
         char[] charArray = stringInt.toCharArray();

@@ -30,6 +30,16 @@
         android:text="Start Playing!"
         android:layout_below="@id/player_two_name"/>
 
+    <Button
+        android:id="@+id/clear_history_butt"
+        android:layout_toRightOf="@id/start_game_button"
+        android:layout_alignTop="@id/start_game_button"
+        android:text="Clear History"
+        android:layout_alignParentRight="true"
+        android:layout_marginLeft="75sp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
     <TextView
         android:id="@+id/last_winner_text"
         android:layout_width="wrap_content"
@@ -40,11 +50,12 @@
         android:text="Previous Winner:"
         android:gravity="center"/>
 
-<android.support.v7.widget.RecyclerView
-    android:id="@+id/resultsrecycler"
-    android:layout_below="@id/last_winner_text"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:foregroundGravity="top"/>
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/resultsrecycler"
+        android:layout_below="@id/last_winner_text"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
+
+
 
 </RelativeLayout>
